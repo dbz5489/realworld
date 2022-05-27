@@ -13,11 +13,9 @@
           </p>
 
           <ul class="error-messages">
-            <template v-for="(messages, field) in errors">
-              <li v-for="(message, index) in messages" :key="index">
-                {{ field }} {{ message }}
-              </li>
-            </template>
+            <li v-for="(message, field) in errors" :key="message">
+              {{ field }} {{ message }}
+            </li>
           </ul>
 
           <form @submit.prevent="onSubmit">
@@ -77,8 +75,8 @@ export default {
     return {
       user: {
         username: "",
-        email: "lpzmail@163.com",
-        password: "12345678",
+        email: "",
+        password: "",
       },
       errors: {}, // 错误信息
     };

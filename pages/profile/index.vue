@@ -1,38 +1,57 @@
 <template>
   <div class="profile-page">
-
     <div class="user-info">
       <div class="container">
         <div class="row">
-
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-            <h4>Eric Simons</h4>
-            <p>
-              Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger Games
-            </p>
-            <button class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-plus-round"></i>
-              &nbsp;
-              Follow Eric Simons
-            </button>
-          </div>
+            <img
+              :src="
+                profile.image ||
+                'https://static.productionready.io/images/smiley-cyrus.jpg'
+              "
+              class="user-img"
+            />
 
+            <h4>{{ profile.username }}</h4>
+            <p>
+              {{ profile.bio }}
+            </p>
+            <button
+              class="btn btn-sm btn-outline-secondary action-btn"
+              v-if="$store.state.user.username !== profile.username"
+            >
+              <i class="ion-plus-round"></i>
+              &nbsp; {{ profile.following ? "取关" : "关注" }}
+            </button>
+            <section v-else>
+              <button class="btn btn-sm btn-outline-secondary action-btn">
+                <i class="ion-plus-round"></i>
+                &nbsp;
+                <nuxt-link to="/settings">编辑用户信息</nuxt-link></button
+              >&nbsp; &nbsp;
+              <button
+                class="btn btn-sm btn-outline-secondary action-btn"
+                style="margin-right: 8px"
+                @click="loginout"
+              >
+                &nbsp; 退出登录
+              </button>
+            </section>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="container">
       <div class="row">
-
         <div class="col-xs-12 col-md-10 offset-md-1">
           <div class="articles-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link active" href="">My Articles</a>
+                <span class="nav-link active">我的发布</span>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
+                <span class="nav-link">我的喜欢</span>
               </li>
             </ul>
           </div>
@@ -67,7 +86,10 @@
               </button>
             </div>
             <a href="" class="preview-link">
-              <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
+              <h1>
+                The song you won't ever stop singing. No matter how hard you
+                try.
+              </h1>
               <p>This is the description for the post.</p>
               <span>Read more...</span>
               <ul class="tag-list">
@@ -76,23 +98,38 @@
               </ul>
             </a>
           </div>
-
-
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import { getProfile } from "@/api/user";
+// 仅在客户端加载 js-cookie 包
+const Cookie = process.client ? require("js-cookie") : undefined;
+
 export default {
-  middleware: 'authenticated',
-  name: 'UserProfile'
-}
+  middleware: "authenticated",
+  name: "UserProfile",
+  data() {
+    return {
+      profile: {},
+    };
+  },
+  async mounted() {
+    const res = await getProfile(this.$route.params.username);
+    this.profile = res.data.profile;
+  },
+  methods: {
+    loginout() {
+      this.$store.commit("setUser", null);
+      // 存储到cookie,本地存储不行服务端拿不到
+      Cookie.set("user", null);
+      this.$router.push("/login");
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

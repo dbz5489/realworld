@@ -36,3 +36,28 @@ pm2 stop {id}
 pm2 list
 pm2 reload
 pm2 restart
+
+# 关闭内部防火墙
+systemctl stop firewalld      # 临时关
+systemctl disable firewalld   # 永久关. 重启以后也是关着的
+
+# 开启内部防火墙
+#systemctl start firewalld
+
+# 添加开放端口规则
+#firewall-cmd --zone=public --add-port=22/tcp   --permanent
+#firewall-cmd --zone=public --add-port=80/tcp   --permanent
+#firewall-cmd --zone=public --add-port=443/tcp  --permanent
+#firewall-cmd --zone=public --add-port=1337/tcp --permanent
+#firewall-cmd --zone=public --add-port=3000/tcp --permanent
+#firewall-cmd --zone=public --add-port=3306/tcp --permanent
+#firewall-cmd --zone=public --add-port=8080/tcp --permanent
+
+# 重新加载规则. 使之立刻生效.
+#firewall-cmd --reload
+
+<!-- 自动化
+ -->
+git tag v0.1.0
+git tag
+git push origin v0.1.0
