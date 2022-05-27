@@ -74,15 +74,20 @@ export default {
       const article = this.article;
       if (article.tagList) {
         article.tagList = article.tagList.split("/");
+        article.tagList = [...new Set(article.tagList)];
       }
-      addArticle(article).then((res) => {
-        this.$router.push({
-          name: "article",
-          params: {
-            slug: res.data.article.slug,
-          },
+      addArticle(article)
+        .then((res) => {
+          this.$router.push({
+            name: "article",
+            params: {
+              slug: res.data.article.slug,
+            },
+          });
+        })
+        .catch((err) => {
+          alert(JSON.stringify(err.response.data.errors));
         });
-      });
     },
   },
 };

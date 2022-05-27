@@ -19,7 +19,7 @@
                 <input
                   class="form-control form-control-lg"
                   type="text"
-                  placeholder="姓名"
+                  placeholder="姓名(请使用英文/数字的格式)"
                   required
                   v-model="user.username"
                 />
@@ -34,7 +34,7 @@
               <fieldset class="form-group">
                 <input
                   class="form-control form-control-lg"
-                  type="text"
+                  type="email"
                   placeholder="邮箱"
                   required
                   v-model="user.email"
@@ -46,6 +46,7 @@
                   type="password"
                   placeholder="密码"
                   required
+                  minlength="8"
                   v-model="user.password"
                 />
               </fieldset>
@@ -79,15 +80,20 @@ export default {
   },
   methods: {
     onSubmit() {
-      UpdateUser(this.user).then((res) => {
-        console.log(res.data);
-        // TODO: 保存用户的登录状态
-        this.$store.commit("setUser", res.data.user);
-        this.$router.push({
-          name: "profile",
-          params: { username: res.data.user.username },
+      UpdateUser(this.user)
+        .then((res) => {
+          if (res.data.errors) {
+            // TODO: 保存用户的登录状态
+            this.$store.commit("setUser", res.data.user);
+            this.$router.push({
+              name: "profile",
+              params: { username: res.data.user.username },
+            });
+          }
+        })
+        .catch((err) => {
+          alert(JSON.stringify(err.response.data.errors));
         });
-      });
     },
   },
 };
