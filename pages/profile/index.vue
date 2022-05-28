@@ -48,10 +48,10 @@
           <div class="articles-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <span class="nav-link active">我的发布</span>
+                <span class="nav-link active">发布的文章</span>
               </li>
               <li class="nav-item">
-                <span class="nav-link">我的喜欢</span>
+                <span class="nav-link">喜欢的文章</span>
               </li>
             </ul>
           </div>

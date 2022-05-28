@@ -74,12 +74,16 @@ export default {
   },
   methods: {
     async getComments() {
-      console.log("ar", this.article);
       const { data } = await getComments(this.article.slug);
       this.comments = data.comments;
     },
     async onAddComment() {
-      if (!this.inputComment) return;
+      const user = this.$store.state.user;
+      if (!user) {
+        alert("请先登录");
+        this.$router.push("/login");
+        return;
+      }
       const res = await addComments(this.article.slug, this.inputComment);
       this.comments.unshift(res.data.comment);
     },

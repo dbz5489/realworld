@@ -29,6 +29,7 @@
                   class="form-control form-control-lg"
                   rows="8"
                   placeholder="个人签名"
+                  v-model="user.bio"
                 ></textarea>
               </fieldset>
               <fieldset class="form-group">
@@ -82,7 +83,7 @@ export default {
     onSubmit() {
       UpdateUser(this.user)
         .then((res) => {
-          if (res.data.errors) {
+          if (res.data.user) {
             // TODO: 保存用户的登录状态
             this.$store.commit("setUser", res.data.user);
             this.$router.push({
